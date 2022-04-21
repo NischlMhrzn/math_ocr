@@ -6,6 +6,7 @@ numpy==1.20.3
 opencv_python==4.3.0.36
 pandas==1.4.2
 Pillow==9.1.0
+pytesseract==0.3.9
 PyYAML==6.0
 requests==2.27.1
 timm==0.5.4
