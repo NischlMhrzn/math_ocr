@@ -21,7 +21,7 @@ from timm.models.layers import StdConv2dSame
 # from dataset.latex2png import tex2pil
 from src.img2latex.model import get_model
 from utils.img2latex.utils import *
-from img2latex.get_latest_checkpoint import download_checkpoints
+from src.img2latex.get_latest_checkpoint import download_checkpoints
 
 last_pic = None
 
