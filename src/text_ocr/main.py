@@ -5,7 +5,7 @@ import argparse
 
 def ocr(image):
     # configurations
-    config = "-l eng+equ --oem 1 --psm 6 tessconfig"
+    config = "-l eng --oem 1 --psm 6 tessconfig"
     # pytessercat
     text = pytesseract.image_to_string(image, config=config)
     # print text
