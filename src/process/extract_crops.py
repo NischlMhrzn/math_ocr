@@ -3,6 +3,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+def pad_images(img, expected_size):
+    pad_img = np.zeros((expected_size, expected_size, 3), dtype="uint8")
+    h, w = img.shape[0], img.shape[1]
+    if max(h, w) > expected_size:
+        ratio = expected_size / max(h, w)
+        img = cv2.resize(img, (int(w * ratio), int(h * ratio)))
+    pad_img[0 : img.shape[0], 0 : img.shape[1]] = img
+    return pad_img
+
+
 def get_bbox_crops(image, bboxes):
     crops = []
     for bbox in bboxes:
@@ -14,8 +24,8 @@ def get_bbox_crops(image, bboxes):
 def get_equation_removed(image, bboxes):
     new_image = np.copy(image)
     for bbox in bboxes:
-        new_image[bbox[1] : bbox[3], bbox[0] : bbox[2]] = np.zeros(
-            new_image[bbox[1] : bbox[3], bbox[0] : bbox[2]].shape
+        new_image[bbox[1] : bbox[3], bbox[0] : bbox[2]] = np.full(
+            new_image[bbox[1] : bbox[3], bbox[0] : bbox[2]].shape, fill_value=255
         )
     return new_image
 
