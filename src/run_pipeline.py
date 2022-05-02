@@ -2,7 +2,12 @@ import argparse
 import cv2
 from src.detection.detect import MathDetector, ArgStub
 import numpy as np
-from src.process.extract_crops import get_bbox_crops, get_equation_removed
+from src.process.extract_crops import (
+    get_bbox_crops,
+    get_equation_removed,
+    pad_images,
+    pad_bbox2_img,
+)
 from src.text_ocr.main import ocr
 from src.img2latex.main import call_model, initialize
 import matplotlib.pyplot as plt
@@ -56,17 +61,20 @@ if __name__ == "__main__":
 
     md = MathDetector("./models/AMATH512_e1GTDB.pth", ArgStub())
     image = cv2.imread(arguments.img_path, cv2.IMREAD_COLOR)
-    bbox, scores = md.DetectAny(0.4, np.array(image))
-
-    crops = get_bbox_crops(image, bbox[0])
-    text_img = get_equation_removed(image, bbox[0])
+    pad_image, ratio = pad_images(image, 512)
+    plt.imshow(pad_image)
+    plt.show()
+    pad_bbox, scores = md.DetectAny(0.2, np.array(pad_image))
+    img_bbox = pad_bbox2_img(pad_bbox[0], ratio)
+    crops = get_bbox_crops(image, img_bbox)
+    text_img = get_equation_removed(image, img_bbox)
     plt.imshow(text_img)
     plt.show()
     print(ocr(text_img))
 
     for crop in crops:
-        img = Image.fromarray(crop)
-        plt.imshow(img)
+        plt.imshow(crop)
         plt.show()
+        img = Image.fromarray(np.array(crop))
         pred = call_model(args, *objs, img=img)
         print(pred)
