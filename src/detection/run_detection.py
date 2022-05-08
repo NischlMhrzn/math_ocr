@@ -9,10 +9,9 @@ import shutil
 from math import sqrt as sqrt
 from itertools import product as product
 import argparse
-from utils.detection.draw_bounding_box import DrawAllBoxes
 from config.detection_config import exp_cfg
 from src.detection.detect import MathDetector, ArgStub
-from src.process.extract_crops import get_bbox_crops, get_equation_removed
+from src.process.extract_crops import get_bbox_crops, get_equation_removed, pad_images
 
 
 def parse_args():
@@ -149,16 +148,24 @@ if __name__ == "__main__":
         gpu_id = get_freer_gpu()
         torch.cuda.set_device(gpu_id)
 
-    md = MathDetector("./models/AMATH512_e1GTDB.pth", ArgStub())
+    # md = MathDetector("./models/AMATH512_e1GTDB.pth", ArgStub())
     image = cv2.imread(args.img_path, cv2.IMREAD_COLOR)
-    bbox, scores = md.DetectAny(0.4, np.array(image))
-    print(scores)
-    print(len(scores[0]), len(bbox[0]))
-
-    crops = get_bbox_crops(image, bbox[0])
-    text_img = get_equation_removed(image, bbox[0])
-    for i in crops:
-        plt.imshow(i)
-        plt.show()
-    plt.imshow(text_img)
+    print(image.shape)
+    plt.imshow(image)
     plt.show()
+    pad = pad_images(image, 512)
+    print(pad.shape)
+    plt.imshow(pad)
+    plt.show()
+
+    # bbox, scores = md.DetectAny(0.4, np.array(image))
+    # print(scores)
+    # print(len(scores[0]), len(bbox[0]))
+
+    # crops = get_bbox_crops(image, bbox[0])
+    # text_img = get_equation_removed(image, bbox[0])
+    # for i in crops:
+    #     plt.imshow(i)
+    #     plt.show()
+    # plt.imshow(text_img)
+    # plt.show()
