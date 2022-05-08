@@ -53,15 +53,14 @@ if __name__ == "__main__":
         [253, 177, 311, 192],
         [199, 60, 243, 81],
     ]
-    p_bbox = pad_bbox2_img(bbox, 2)
-    print(p_bbox)
-    # crops = get_bbox_crops(image, bbox)
-    # text = get_equation_removed(image, bbox)
-    # plt.imshow(text)
-    # plt.show()
-    # plt.imshow(image)
-    # plt.show()
-    # for i in crops:
-    #     plt.imshow(i)
-    #     plt.show()
+
+    crops = get_bbox_crops(image, bbox)
+    text = get_equation_removed(image, bbox)
+    plt.imshow(text)
+    plt.show()
+    plt.imshow(image)
+    plt.show()
+    for i in crops:
+        plt.imshow(i)
+        plt.show()
     print("Hello")
