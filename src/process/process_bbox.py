@@ -1,6 +1,5 @@
 import cv2
 from utils.detection.visualize import plot_bbox
-from operator import itemgetter
 
 
 def overlap(bbox_1, bbox_2):
