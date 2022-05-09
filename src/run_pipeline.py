@@ -10,7 +10,7 @@ from src.process.extract_crops import (
 )
 from src.text_ocr.main import ocr
 from src.img2latex.main import call_model, initialize
-from src.process.process_bbox import remove_overlap
+from src.process.process_bbox import process_bboxes
 import matplotlib.pyplot as plt
 from PIL import Image
 
@@ -68,6 +68,7 @@ if __name__ == "__main__":
 
     md = MathDetector("./models/AMATH512_e1GTDB.pth", ArgStub())
     image = cv2.imread(arguments.img_path, cv2.IMREAD_COLOR)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     pad_image, ratio = pad_images(image, 512)
     plt.imshow(pad_image)
     plt.show()
@@ -75,10 +76,8 @@ if __name__ == "__main__":
     img_bbox = pad_bbox2_img(pad_bbox[0], ratio)
     print("Bboxes:", img_bbox)
     print("Scores:", scores)
-    plt.imshow(image)
-    plt.show()
-    processed_bboxes = remove_overlap(img_bbox)
-
+    processed_bboxes = process_bboxes(image, img_bbox)
+    print(processed_bboxes)
     crops = get_bbox_crops(image, processed_bboxes)
     text_img = get_equation_removed(image, processed_bboxes)
     plt.imshow(text_img)
