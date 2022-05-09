@@ -4,7 +4,7 @@ import numpy as np
 
 
 def pad_images(img, expected_size):
-    pad_img = np.zeros((expected_size, expected_size, 3), dtype="uint8")
+    pad_img = np.full((expected_size, expected_size, 3), fill_value=255, dtype="uint8")
     h, w = img.shape[0], img.shape[1]
     ratio = 1
     if max(h, w) > expected_size:
