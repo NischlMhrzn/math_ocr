@@ -106,11 +106,9 @@ class MathDetector:
         cls = 1  # math class
         boxes = []
         scores = []
-        print("image_shape:", images.shape)
         y, debug_boxes, debug_scores = self._net(images)  # forward pass
-
         detections = y.data
-        print("DSahpe:", detections.shape)
+
         for k in range(len(images)):
 
             img_boxes = []
@@ -121,6 +119,8 @@ class MathDetector:
                     continue
 
                 pt = detections[k, cls, j, 1:]
+                if pt[0] < 0 or pt[1] < 0 or pt[2] < 0 or pt[3] < 0:
+                    continue
                 coords = (pt[0], pt[1], pt[2], pt[3])
                 img_boxes.append(coords)
                 img_scores.append(detections[k, cls, j, 0])
