@@ -11,6 +11,7 @@ from src.process.extract_crops import (
 from src.text_ocr.main import ocr
 from src.img2latex.main import call_model, initialize
 from src.process.process_bbox import process_bboxes
+from src.ranking.main import rank
 import matplotlib.pyplot as plt
 from PIL import Image
 
@@ -62,6 +63,7 @@ if __name__ == "__main__":
         default=0.2,
         help="threshold on scores for detecting bounding box for mathematical equation",
     )
+    parser.add_argument("--csv_path", type=str, default=None, help="path to the csv")
     arguments = parser.parse_args()
 
     args, *objs = initialize(arguments)
@@ -74,15 +76,17 @@ if __name__ == "__main__":
     plt.show()
     pad_bbox, scores = md.DetectAny(arguments.detect_thresh, np.array(pad_image))
     img_bbox = pad_bbox2_img(pad_bbox[0], ratio)
-    print("Bboxes:", img_bbox)
-    print("Scores:", scores)
+    # print("Bboxes:", img_bbox)
+    # print("Scores:", scores)
     processed_bboxes = process_bboxes(image, img_bbox)
-    print(processed_bboxes)
+    # print(processed_bboxes)
     crops = get_bbox_crops(image, processed_bboxes)
     text_img = get_equation_removed(image, processed_bboxes)
     plt.imshow(text_img)
     plt.show()
-    print(ocr(text_img))
+    ocr_text = " ".join(ocr(text_img))
+    # print(ocr_text)
+    print(rank([ocr_text], arguments.csv_path))
 
     for crop in crops:
         plt.imshow(crop)
