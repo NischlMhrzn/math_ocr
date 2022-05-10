@@ -88,7 +88,6 @@ def check_black_pixels(pixels):
 
 def process_bboxes(image, bboxes):
     bboxes = remove_overlap(bboxes)
-    print("removed:", bboxes)
     bboxes = adjust_pad(image, bboxes)
     return bboxes
 
