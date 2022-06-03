@@ -14,6 +14,8 @@ from src.process.process_bbox import process_bboxes
 from src.ranking.main import rank
 import matplotlib.pyplot as plt
 from PIL import Image
+from src.equation_postprocess.latex2sympy import rank_equation
+from sympy.parsing.latex import parse_latex
 
 if __name__ == "__main__":
     print("Running Pipeline")
@@ -85,7 +87,7 @@ if __name__ == "__main__":
     plt.imshow(text_img)
     plt.show()
     ocr_text = " ".join(ocr(text_img))
-    # print(ocr_text)
+    print(ocr_text)
     print(rank([ocr_text], arguments.csv_path))
 
     for crop in crops:
@@ -94,3 +96,5 @@ if __name__ == "__main__":
         img = Image.fromarray(np.array(crop))
         pred = call_model(args, *objs, img=img)
         print(pred)
+        rank_equation(pred)
+        
